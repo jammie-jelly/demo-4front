@@ -176,6 +176,27 @@ Route::get('/openapi.json', function () {
                     ],
                 ],
             ],
+            '/wallets/all' => [
+                'get' => [
+                    'summary' => 'Get all users with their total wallet balances',
+                    'tags' => ['Wallets'],
+                    'responses' => [
+                        '200' => [
+                            'description' => 'All users and their total balances retrieved successfully',
+                            'content' => [
+                                'application/json' => [
+                                    'schema' => [
+                                        'type' => 'array',
+                                        'items' => [
+                                            '$ref' => '#/components/schemas/UserBalance',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ],
         'components' => [
             'schemas' => [
@@ -185,14 +206,16 @@ Route::get('/openapi.json', function () {
                         'id' => ['type' => 'integer', 'example' => 1],
                         'name' => ['type' => 'string', 'example' => 'John Doe'],
                         'email' => ['type' => 'string', 'format' => 'email', 'example' => 'john@example.com'],
+                        'membership' => ['type' => 'string', 'enum' => ['Foundation', 'Economy'], 'example' => 'Foundation'],
                     ],
                 ],
                 'UserInput' => [
                     'type' => 'object',
-                    'required' => ['name', 'email'],
+                    'required' => ['name', 'email', 'membership'],
                     'properties' => [
                         'name' => ['type' => 'string', 'example' => 'John Doe'],
                         'email' => ['type' => 'string', 'format' => 'email', 'example' => 'john@example.com'],
+                        'membership' => ['type' => 'string', 'enum' => ['Foundation', 'Economy'], 'example' => 'Foundation'],
                     ],
                 ],
                 'UserProfile' => [
@@ -256,6 +279,13 @@ Route::get('/openapi.json', function () {
                         'description' => ['type' => 'string', 'nullable' => true],
                     ],
                 ],
+                'UserBalance' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'user_name' => ['type' => 'string', 'example' => 'John Doe'],
+                        'total_balance' => ['type' => 'number', 'format' => 'decimal', 'example' => 6500.00],
+                    ],
+                ],
             ],
         ],
     ]);
@@ -265,6 +295,7 @@ Route::get('/openapi.json', function () {
 Route::post('/users', [UserController::class, 'store']);
 Route::post('/users/{userId}/wallets', [WalletController::class, 'store']);
 Route::get('/users/{userId}/profile', [ProfileController::class, 'show']);
+Route::get('/wallets/all', [WalletController::class, 'getAllWallets']);
 Route::get('/wallets/{walletId}', [WalletController::class, 'show']);
 Route::post('/wallets/{walletId}/transactions', [TransactionController::class, 'store']);
 

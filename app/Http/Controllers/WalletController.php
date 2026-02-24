@@ -33,4 +33,23 @@ class WalletController extends Controller
 
         return response()->json($wallet);
     }
+
+    /**
+     * Get all wallets for all users with total balance
+     */
+    public function getAllWallets()
+    {
+        $wallets = User::with('wallets.transactions')
+            ->get()
+            ->map(function ($user) {
+                $totalBalance = $user->wallets->sum('balance');
+
+                return [
+                    'user_name' => $user->name,
+                    'total_balance' => (float) $totalBalance,
+                ];
+            });
+
+        return response()->json($wallets);
+    }
 }
