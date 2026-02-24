@@ -443,6 +443,9 @@
             background-color: var(--gold-light);
         }
 
+        /* Account Link Button */
+
+
         /* Current Membership Display */
         .current-membership-section {
             background-color: var(--dark-bg);
@@ -486,7 +489,7 @@
 
         <div class="main-content">
             <!-- Welcome Card -->
-            <div class="welcome-card">
+            <div class="welcome-card" onclick="goToAccount()" style="cursor: pointer;" title="Click to manage your account">
                 <div class="welcome-profile">
                     <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face" alt="User">
                     <h4 id="userName">User</h4>
@@ -583,6 +586,23 @@
             localStorage.removeItem('fourfront_user');
             window.location.href = '/signup.html';
         }
+
+        function goToAccount() {
+            window.location.href = '/account.html';
+        }
+
+        // Add hover effect to welcome card
+        document.addEventListener('DOMContentLoaded', function() {
+            const welcomeCard = document.querySelector('.welcome-card');
+            if (welcomeCard) {
+                welcomeCard.addEventListener('mouseenter', function() {
+                    this.style.opacity = '0.8';
+                });
+                welcomeCard.addEventListener('mouseleave', function() {
+                    this.style.opacity = '1';
+                });
+            }
+        });
 
         // Redirect to signup if no user data
         const user = loadUser();

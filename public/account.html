@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account - Fourfront</title>
+    <link rel="stylesheet" href="/bootstrap-icons/bootstrap-icons.css">
+    <style>
+        :root {
+            --dark-bg: #3a3a3a;
+            --darker-bg: #2d2d2d;
+            --gold: #d4a83b;
+            --gold-light: #e5c55c;
+            --pink-card: #f5d5d5;
+            --green-card: #d5f5d5;
+            --yellow-card: #f5e5c5;
+            --blue-gray: #6b7f94;
+            --text-light: #ffffff;
+            --text-muted: #cccccc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f0;
+            min-height: 100vh;
+        }
+
+        .mobile-container {
+            max-width: 420px;
+            margin: 0 auto;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .custom-header {
+            background-color: var(--dark-bg);
+            border-bottom: 2px solid var(--gold);
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--gold);
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .back-btn:hover {
+            color: var(--gold-light);
+        }
+
+        .header-title {
+            color: var(--gold);
+            font-size: 18px;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 15px;
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background-color: var(--dark-bg);
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid var(--gold);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .profile-card h2 {
+            color: var(--gold);
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .profile-card p {
+            color: var(--text-light);
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .profile-card .label {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        /* Section Title */
+        .section-title {
+            color: var(--gold);
+            font-size: 16px;
+            font-weight: 600;
+            margin: 20px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--blue-gray);
+        }
+
+        /* Wallet Card */
+        .wallet-card {
+            background-color: var(--dark-bg);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--gold);
+        }
+
+        .wallet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .wallet-name {
+            color: var(--text-light);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .wallet-balance {
+            color: var(--gold);
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .wallet-id {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        /* Form Styles */
+        .form-section {
+            background-color: var(--dark-bg);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--blue-gray);
+        }
+
+        .form-section h3 {
+            color: var(--gold);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-light);
+            font-size: 12px;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid var(--gold);
+            border-radius: 6px;
+            font-size: 13px;
+            background-color: var(--darker-bg);
+            color: var(--text-light);
+            box-sizing: border-box;
+        }
+
+        .form-group input::placeholder,
+        .form-group select {
+            color: var(--text-muted);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--gold-light);
+            box-shadow: 0 0 5px rgba(212, 168, 59, 0.3);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--gold);
+            color: #222;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: var(--gold-light);
+        }
+
+        .btn:disabled {
+            background-color: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        /* Loading and Messages */
+        .loading-spinner {
+            text-align: center;
+            color: var(--gold);
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        .success-msg {
+            background-color: var(--green-card);
+            color: #222;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 12px;
+            display: none;
+        }
+
+        .success-msg.show {
+            display: block;
+        }
+
+        .error-msg {
+            background-color: #f5d5d5;
+            color: #922;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 12px;
+            display: none;
+        }
+
+        .error-msg.show {
+            display: block;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--gold);
+            padding: 15px 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 12px;
+            color: #222;
+        }
+
+        .transaction-btn {
+            background-color: var(--blue-gray);
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            margin-top: 8px;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .transaction-btn:hover {
+            background-color: #7a8fa3;
+        }
+
+        .transaction-form {
+            background-color: var(--darker-bg);
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .transaction-form.show {
+            display: block;
+        }
+
+        /* Recent Transactions */
+        .recent-transactions {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--blue-gray);
+            font-size: 12px;
+        }
+
+        .recent-transactions-title {
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 11px;
+        }
+
+        .transaction-item.income {
+            color: #4CAF50;
+        }
+
+        .transaction-item.expense {
+            color: #FF9999;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- Header -->
+        <div class="custom-header">
+            <button class="back-btn" onclick="goBack()">
+                <i class="bi bi-arrow-left"></i>
+            </button>
+            <div class="header-title">My Account</div>
+            <div style="width: 24px;"></div>
+        </div>
+
+        <div class="main-content">
+            <!-- Profile Card -->
+            <div class="profile-card">
+                <h2 id="userNameDisplay">Loading...</h2>
+                <p><span class="label">Email:</span> <br><span id="userEmailDisplay">-</span></p>
+                <p><span class="label">Membership:</span> <br><span id="userMembershipDisplay">-</span></p>
+                <p><span class="label">Total Balance:</span> <br><span id="userBalanceDisplay">-</span></p>
+            </div>
+
+            <!-- Create Wallet Section -->
+            <div class="form-section">
+                <h3>Create New Wallet</h3>
+                <div class="success-msg" id="walletSuccessMsg">Wallet created successfully!</div>
+                <div class="error-msg" id="walletErrorMsg"></div>
+                <form id="createWalletForm">
+                    <div class="form-group">
+                        <label for="walletName">Wallet Name</label>
+                        <input type="text" id="walletName" placeholder="e.g., Savings, Investment" required>
+                    </div>
+                    <button type="submit" class="btn">Create Wallet</button>
+                </form>
+            </div>
+
+            <!-- Wallets Section -->
+            <h3 class="section-title">My Wallets</h3>
+            <div id="walletsContainer">
+                <div class="empty-message">No wallets yet. Create one to get started.</div>
+            </div>
+
+            <!-- Add Transaction Section -->
+            <div id="transactionSection" style="display: none; margin-top: 20px;">
+                <div class="form-section">
+                    <h3>Add Transaction</h3>
+                    <div class="success-msg" id="transactionSuccessMsg">Transaction added successfully!</div>
+                    <div class="error-msg" id="transactionErrorMsg"></div>
+                    <form id="addTransactionForm">
+                        <div class="form-group">
+                            <label for="transactionType">Type</label>
+                            <select id="transactionType" required>
+                                <option value="">Select type</option>
+                                <option value="income">Income</option>
+                                <option value="expense">Expense</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="transactionAmount">Amount</label>
+                            <input type="number" id="transactionAmount" placeholder="Enter amount" min="0.01" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="transactionDescription">Description (optional)</label>
+                            <input type="text" id="transactionDescription" placeholder="What is this for?">
+                        </div>
+                        <button type="submit" class="btn">Add Transaction</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Fourfront Management &copy; <span id="current-year">2025</span>. All Rights Reserved.</p>
+        </div>
+    </div>
+
+    <script>
+        // ===== STATE =====
+        let currentUser = null;
+        let userProfile = null;
+        let selectedWalletId = null;
+
+        // ===== AUTHENTICATION =====
+        function loadUser() {
+            const userData = localStorage.getItem('fourfront_user');
+            return userData ? JSON.parse(userData) : null;
+        }
+
+        currentUser = loadUser();
+        if (!currentUser || !currentUser.email || !currentUser.id) {
+            window.location.href = '/signup.html';
+        }
+
+        // ===== NAVIGATION =====
+        function goBack() {
+            window.location.href = '/';
+        }
+
+        // ===== API CALLS =====
+        async function fetchUserProfile() {
+            try {
+                const response = await fetch(`/api/users/${currentUser.id}/profile`);
+                if (!response.ok) {
+                    console.error('Error fetching profile');
+                    return null;
+                }
+                const data = await response.json();
+                return {
+                    name: currentUser.name,
+                    email: currentUser.email,
+                    membership: currentUser.membership || 'Not selected',
+                    total_balance: data.total_balance || 0
+                };
+            } catch (error) {
+                console.error('Error fetching profile:', error);
+                return null;
+            }
+        }
+
+        async function fetchWallets(userId) {
+            // Verify user ID matches logged-in user for security
+            console.log(`fetchWallets: checking userId=${userId} against currentUser.id=${currentUser.id}`);
+            if (userId !== currentUser.id) {
+                console.error('Unauthorized: User ID mismatch');
+                return [];
+            }
+            try {
+                const url = `/api/users/${userId}/profile`;
+                console.log(`Fetching wallets from ${url}`);
+                const response = await fetch(url);
+                console.log(`Profile API response status: ${response.status}`);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error(`Error fetching wallets: ${response.status} - ${errorText}`);
+                    return [];
+                }
+                const data = await response.json();
+                console.log('Profile data:', data);
+                const wallets = data.wallets || [];
+                console.log(`Returning ${wallets.length} wallets`);
+                return wallets;
+            } catch (error) {
+                console.error('Error fetching wallets:', error);
+                return [];
+            }
+        }
+
+        async function createWallet(userId, walletName) {
+            // Verify user ID matches logged-in user for security
+            if (userId !== currentUser.id) {
+                throw new Error('Unauthorized: Cannot create wallet for another user');
+            }
+            try {
+                const response = await fetch(`/api/users/${userId}/wallets`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ name: walletName })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.message || 'Error creating wallet');
+                }
+
+                return await response.json();
+            } catch (error) {
+                throw error;
+            }
+        }
+
+        async function addTransaction(walletId, type, amount, description) {
+            // Verify wallet belongs to current user
+            // This is a client-side check; the server should also validate
+            try {
+                const url = `/api/wallets/${walletId}/transactions`;
+                const payload = {
+                    type: type,
+                    amount: amount,
+                    description: description || null
+                };
+                console.log(`Posting transaction to ${url}:`, payload);
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                console.log(`Transaction API response status: ${response.status}`);
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    console.error('Transaction error response:', error);
+                    throw new Error(error.message || error.error || 'Error adding transaction');
+                }
+
+                const result = await response.json();
+                console.log('Transaction created:', result);
+                return result;
+            } catch (error) {
+                console.error('addTransaction error:', error);
+                throw error;
+            }
+        }
+
+        // ===== UI FUNCTIONS =====
+        async function displayProfile() {
+            const profile = await fetchUserProfile();
+            if (profile) {
+                document.getElementById('userNameDisplay').textContent = profile.name;
+                document.getElementById('userEmailDisplay').textContent = profile.email;
+                document.getElementById('userMembershipDisplay').textContent = profile.membership;
+                document.getElementById('userBalanceDisplay').textContent = '$' + parseFloat(profile.total_balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            }
+        }
+
+        async function displayWallets(userId) {
+            console.log(`displayWallets called with userId=${userId}`);
+            console.log(`currentUser:`, currentUser);
+            
+            const wallets = await fetchWallets(userId);
+            console.log('Wallets fetched:', wallets);
+            
+            const container = document.getElementById('walletsContainer');
+
+            if (!wallets || wallets.length === 0) {
+                console.log('No wallets to display');
+                container.innerHTML = '<div class="empty-message">No wallets yet. Create one to get started.</div>';
+                document.getElementById('transactionSection').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('transactionSection').style.display = 'block';
+
+            // Fetch detailed wallet data including transactions
+            let walletsHTML = '';
+            for (const wallet of wallets) {
+                console.log(`Processing wallet: ${wallet.id} - ${wallet.name}`);
+                try {
+                    const detailResponse = await fetch(`/api/wallets/${wallet.id}`);
+                    console.log(`Wallet ${wallet.id} detail response status:`, detailResponse.status);
+                    
+                    const walletDetails = detailResponse.ok ? await detailResponse.json() : wallet;
+                    console.log(`Wallet ${wallet.id} details:`, walletDetails);
+                    
+                    const transactions = walletDetails.transactions || [];
+                    const recentTransactions = transactions.slice(0, 5);
+                    console.log(`Wallet ${wallet.id} has ${transactions.length} transactions, showing ${recentTransactions.length}`);
+
+                    walletsHTML += `
+                        <div class="wallet-card">
+                            <div class="wallet-header">
+                                <div>
+                                    <div class="wallet-name">${wallet.name}</div>
+                                    <div class="wallet-id">ID: ${wallet.id}</div>
+                                </div>
+                                <div class="wallet-balance">$${parseFloat(wallet.balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                            </div>
+                            ${recentTransactions.length > 0 ? `
+                                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--blue-gray); font-size: 12px;">
+                                    <div style="color: var(--text-muted); margin-bottom: 8px; font-weight: 600;">Recent Transactions:</div>
+                                    ${recentTransactions.reverse().map(tx => `
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: ${tx.type === 'income' ? 'var(--green-card)' : '#f5d5d5'}">
+                                            <span>${tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}${tx.description ? ': ' + tx.description : ''}</span>
+                                            <span>${tx.type === 'income' ? '+' : '-'}$${parseFloat(tx.amount).toFixed(2)}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
+                            <button class="transaction-btn" onclick="toggleTransactionForm(${wallet.id})">Add Transaction</button>
+                            <div class="transaction-form" id="transForm-${wallet.id}">
+                                <div class="form-group">
+                                    <label>Quick Transaction</label>
+                                    <div style="display: flex; gap: 5px; margin-top: 8px;">
+                                        <input type="number" placeholder="Amount" id="quickAmount-${wallet.id}" min="0.01" step="0.01">
+                                        <select id="quickType-${wallet.id}" style="flex: 1;">
+                                            <option value="income">Income</option>
+                                            <option value="expense">Expense</option>
+                                        </select>
+                                    </div>
+                                    <button type="button" class="btn" onclick="quickAddTransaction(${wallet.id})" style="margin-top: 8px;">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } catch (error) {
+                    console.error(`Error fetching wallet ${wallet.id} details:`, error);
+                    // Fallback to basic wallet display
+                    walletsHTML += `
+                        <div class="wallet-card">
+                            <div class="wallet-header">
+                                <div>
+                                    <div class="wallet-name">${wallet.name}</div>
+                                    <div class="wallet-id">ID: ${wallet.id}</div>
+                                </div>
+                                <div class="wallet-balance">$${parseFloat(wallet.balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                            </div>
+                            <button class="transaction-btn" onclick="toggleTransactionForm(${wallet.id})">Add Transaction</button>
+                            <div class="transaction-form" id="transForm-${wallet.id}">
+                                <div class="form-group">
+                                    <label>Quick Transaction</label>
+                                    <div style="display: flex; gap: 5px; margin-top: 8px;">
+                                        <input type="number" placeholder="Amount" id="quickAmount-${wallet.id}" min="0.01" step="0.01">
+                                        <select id="quickType-${wallet.id}" style="flex: 1;">
+                                            <option value="income">Income</option>
+                                            <option value="expense">Expense</option>
+                                        </select>
+                                    </div>
+                                    <button type="button" class="btn" onclick="quickAddTransaction(${wallet.id})" style="margin-top: 8px;">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            console.log('Setting container HTML');
+            container.innerHTML = walletsHTML;
+            console.log('displayWallets complete');
+        }
+
+        function toggleTransactionForm(walletId) {
+            const form = document.getElementById(`transForm-${walletId}`);
+            form.classList.toggle('show');
+        }
+
+        async function quickAddTransaction(walletId) {
+            const amountInput = document.getElementById(`quickAmount-${walletId}`);
+            const typeInput = document.getElementById(`quickType-${walletId}`);
+            
+            if (!amountInput || !typeInput) {
+                console.error(`Form elements not found for wallet ${walletId}`);
+                alert('Form error - please refresh the page');
+                return;
+            }
+            
+            const amount = parseFloat(amountInput.value);
+            const type = typeInput.value;
+
+            if (!amount || amount <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+
+            try {
+                console.log(`Adding transaction: wallet=${walletId}, type=${type}, amount=${amount}`);
+                const result = await addTransaction(walletId, type, amount, '');
+                console.log('Transaction result:', result);
+                
+                if (result) {
+                    console.log('Transaction created successfully, refreshing display...');
+                    amountInput.value = '';
+                    typeInput.value = 'income';
+
+                    // Hide the form
+                    const form = document.getElementById(`transForm-${walletId}`);
+                    if (form) {
+                        form.classList.remove('show');
+                    }
+
+                    // Refresh wallets display
+                    console.log(`Refreshing wallets for user ${currentUser.id}`);
+                    await displayWallets(currentUser.id);
+
+                    // Show success message
+                    const msg = document.getElementById('transactionSuccessMsg');
+                    if (msg) {
+                        msg.classList.add('show');
+                        setTimeout(() => msg.classList.remove('show'), 3000);
+                    }
+                } else {
+                    console.error('Transaction returned no result');
+                }
+            } catch (error) {
+                console.error('Error adding transaction:', error);
+                const msg = document.getElementById('transactionErrorMsg');
+                if (msg) {
+                    msg.textContent = error.message || 'Error adding transaction';
+                    msg.classList.add('show');
+                    setTimeout(() => msg.classList.remove('show'), 5000);
+                }
+            }
+        }
+
+        // ===== EVENT LISTENERS =====
+        document.getElementById('createWalletForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const walletName = document.getElementById('walletName').value.trim();
+            const errorMsg = document.getElementById('walletErrorMsg');
+            const successMsg = document.getElementById('walletSuccessMsg');
+
+            if (!walletName) {
+                errorMsg.textContent = 'Please enter a wallet name';
+                errorMsg.classList.add('show');
+                return;
+            }
+
+            try {
+                // We need to get user ID - for now use a placeholder approach
+                // In a real app, the API would return the user ID
+                await createWallet(currentUser.id || 1, walletName);
+
+                document.getElementById('walletName').value = '';
+                successMsg.classList.add('show');
+                errorMsg.classList.remove('show');
+
+                // Refresh wallets list
+                setTimeout(() => {
+                    displayWallets(currentUser.id || 1);
+                    successMsg.classList.remove('show');
+                }, 1500);
+            } catch (error) {
+                console.error('Error:', error);
+                errorMsg.textContent = error.message;
+                errorMsg.classList.add('show');
+                successMsg.classList.remove('show');
+            }
+        });
+
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('Account page DOMContentLoaded');
+            console.log('currentUser:', currentUser);
+            
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+
+            // Display profile
+            console.log('Calling displayProfile...');
+            await displayProfile();
+
+            // Try to display wallets (might fail if user ID not available)
+            // For now, we'll pass a default ID and let the API handle it
+            try {
+                console.log(`Calling displayWallets with currentUser.id=${currentUser.id}`);
+                await displayWallets(currentUser.id || 1);
+            } catch (error) {
+                console.error('Error loading wallets:', error);
+            }
+        });
+    </script>
+</body>
+</html>

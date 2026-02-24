@@ -152,8 +152,8 @@
             }
         }
 
-        function saveUserToLocalStorage(name, email) {
-            const userData = { name, email, savedAt: new Date().toISOString() };
+        function saveUserToLocalStorage(name, email, id) {
+            const userData = { id, name, email, savedAt: new Date().toISOString() };
             localStorage.setItem('fourfront_user', JSON.stringify(userData));
         }
 
@@ -174,7 +174,7 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    return data; // Return the user data from API
+                    return data; // Return the user data from API with ID
                 } else {
                     console.error('Error creating user:', data);
                     return null;
@@ -197,9 +197,9 @@
                 // Save to database first
                 const dbUser = await saveUserToDatabase(name, email);
 
-                if (dbUser) {
-                    // Save to localStorage
-                    saveUserToLocalStorage(name, email);
+                if (dbUser && dbUser.id) {
+                    // Save to localStorage with user ID
+                    saveUserToLocalStorage(name, email, dbUser.id);
                     window.location.href = '/';
                 } else {
                     alert('Error creating account. Please try again.');
