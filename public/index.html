@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fourfront - Investment Knowledge Club</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --dark-bg: #3a3a3a;
+            --darker-bg: #2d2d2d;
+            --gold: #d4a83b;
+            --gold-light: #e5c55c;
+            --pink-card: #f5d5d5;
+            --green-card: #d5f5d5;
+            --yellow-card: #f5e5c5;
+            --blue-gray: #6b7f94;
+            --text-light: #ffffff;
+            --text-muted: #cccccc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f0;
+            min-height: 100vh;
+        }
+
+        .mobile-container {
+            max-width: 420px;
+            margin: 0 auto;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 15px;
+        }
+
+        /* Welcome Card */
+        .welcome-card {
+            background-color: var(--dark-bg);
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid var(--gold);
+            margin-bottom: 15px;
+        }
+
+        .welcome-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .welcome-profile img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--gold);
+        }
+
+        .welcome-profile h4 {
+            color: var(--text-light);
+            font-size: 22px;
+            margin: 0;
+        }
+
+        .welcome-message {
+            color: var(--text-light);
+            font-size: 18px;
+            line-height: 1.4;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        /* Stats Grid / Carousel */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+            position: relative;
+            min-height: 180px;
+        }
+
+        .stat-card {
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.9);
+            animation: carouselFadeIn 0.6s ease forwards;
+        }
+
+        .stat-card.pink {
+            background-color: var(--pink-card);
+        }
+
+        .stat-card.green {
+            background-color: var(--green-card);
+        }
+
+        .stat-card.yellow {
+            background-color: var(--yellow-card);
+        }
+
+        .stat-profile {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            justify-content: center;
+        }
+
+        .stat-profile span {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #222;
+        }
+
+        @keyframes carouselFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Promo Section */
+        .promo-section {
+            background-color: var(--dark-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .promo-section h5 {
+            color: var(--gold);
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .promo-section p {
+            color: var(--text-muted);
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .promo-section .highlight {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        /* Membership Cards */
+        .membership-card {
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .membership-header {
+            padding: 15px 20px;
+            color: white;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .membership-header h5 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .membership-header.foundation {
+            background-color: var(--gold);
+        }
+
+        .membership-header.economy {
+            background-color: var(--blue-gray);
+        }
+
+        .membership-body {
+            background-color: var(--dark-bg);
+            padding: 15px 20px;
+            max-height: 200px;
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            opacity: 1;
+        }
+
+        .membership-body.hidden {
+            max-height: 0;
+            opacity: 0;
+            padding: 0 20px;
+        }
+
+        .membership-body p {
+            color: var(--text-light);
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .membership-header span {
+            font-weight: 300;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        .membership-header strong {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 16px;
+        }
+
+        /* Details Link */
+        .details-link {
+            background-color: var(--gold);
+            color: #222;
+            text-align: center;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 15px;
+            transition: background-color 0.3s;
+        }
+
+        .details-link:hover {
+            background-color: var(--gold-light);
+            color: #222;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--gold);
+            padding: 15px 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 12px;
+            color: #222;
+        }
+
+        /* WhatsApp Button */
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 20px;
+            right: calc(50% - 200px);
+            width: 55px;
+            height: 55px;
+            background-color: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .whatsapp-btn i {
+            color: white;
+            font-size: 30px;
+        }
+
+        @media (max-width: 420px) {
+            .whatsapp-btn {
+                right: 20px;
+            }
+        }
+
+        /* Clear Data Button */
+        .clear-data-btn {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            padding: 8px 12px;
+            background-color: var(--gold);
+            color: #222;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            z-index: 999;
+        }
+
+        .clear-data-btn:hover {
+            background-color: var(--gold-light);
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- Clear Data Button -->
+        <button class="clear-data-btn" onclick="clearData()">Clear Data</button>
+
+        <div class="main-content">
+            <!-- Welcome Card -->
+            <div class="welcome-card">
+                <div class="welcome-profile">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face" alt="User">
+                    <h4 id="userName">User</h4>
+                </div>
+                <p class="welcome-message">
+                    You've officially joined your first investment knowledge club!
+                </p>
+            </div>
+
+            <!-- Stats Grid (Carousel) -->
+            <div class="stats-grid" id="usersGrid">
+                <!-- Populated by carousel animation -->
+            </div>
+
+            <!-- Promo Section -->
+            <div class="promo-section">
+                <h5>Now let's make you great!</h5>
+                <p>You have shown us where you are doing well and where we can support you to be great!</p>
+                <p class="highlight">From your profile we recommend these memberships. Pick one that fits you best and start your financial adventure</p>
+            </div>
+
+            <!-- Foundation Membership -->
+            <div class="membership-card" data-membership="foundation">
+                <div class="membership-header foundation">
+                    <h5><strong>FOUNDATION</strong> <span>MEMBERSHIP</span></h5>
+                </div>
+                <div class="membership-body">
+                    <p>We invest for you, in shares and in the Mansa-X global fund. Service is free online with your personal representative, but service in the office may have extra charges.</p>
+                </div>
+            </div>
+
+            <!-- Economy Membership -->
+            <div class="membership-card" data-membership="economy">
+                <div class="membership-header economy">
+                    <h5><strong>ECONOMY</strong> <span>MEMBERSHIP</span></h5>
+                </div>
+                <div class="membership-body">
+                    <p>We will invest your money for you at a guaranteed rate with the Mansa-X global fund. Service is free online with your personal representative, but service in the office may have extra charges.</p>
+                </div>
+            </div>
+
+            <!-- Details Link -->
+            <a href="#" class="details-link" id="detailsLink">
+                A closer look at the memberships details is available here
+            </a>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Fourfront Management &copy; <span id="current-year">2025</span>. All Rights Reserved.</p>
+        </div>
+
+        <!-- WhatsApp Button -->
+        <div class="whatsapp-btn" onclick="openWhatsApp()">
+            <i class="bi bi-whatsapp"></i>
+        </div>
+    </div>
+
+    <script>
+        // ===== AUTHENTICATION CHECK =====
+        function loadUser() {
+            const userData = localStorage.getItem('fourfront_user');
+            return userData ? JSON.parse(userData) : null;
+        }
+
+        function clearData() {
+            localStorage.removeItem('fourfront_user');
+            window.location.href = '/signup.html';
+        }
+
+        // Redirect to signup if no user data
+        const user = loadUser();
+        if (!user) {
+            window.location.href = '/signup.html';
+        }
+
+        // ===== MAIN PAGE LOGIC =====
+        let allUsers = [];
+        const CAROUSEL_SIZE = 4;
+
+        async function fetchUsers() {
+            try {
+                const response = await fetch('/api/wallets/all');
+                allUsers = await response.json();
+                startCarousel();
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
+        }
+
+        function getRandomUsers(count) {
+            const shuffled = [...allUsers].sort(() => Math.random() - 0.5);
+            return shuffled.slice(0, count);
+        }
+
+        function displayCarouselFrame() {
+            const usersGrid = document.getElementById('usersGrid');
+            usersGrid.innerHTML = '';
+
+            // Get 4 random users
+            const displayedUsers = getRandomUsers(CAROUSEL_SIZE);
+            const colors = ['pink', 'green', 'yellow'];
+
+            displayedUsers.forEach((user, index) => {
+                const color = colors[index % colors.length];
+                const card = document.createElement('div');
+                card.className = `stat-card ${color}`;
+                card.innerHTML = `
+                    <div class="stat-profile">
+                        <span>${user.user_name}</span>
+                    </div>
+                    <div class="stat-number">${parseFloat(user.total_balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                `;
+                usersGrid.appendChild(card);
+            });
+        }
+
+        function startCarousel() {
+            if (allUsers.length === 0) return;
+
+            displayCarouselFrame();
+            setInterval(() => {
+                displayCarouselFrame();
+            }, 4000); // Change carousel every 4 seconds
+        }
+
+        // Membership toggle functionality
+        function setupMembershipToggles() {
+            document.querySelectorAll('.membership-header').forEach(header => {
+                header.addEventListener('click', function() {
+                    const body = this.nextElementSibling;
+                    body.classList.toggle('hidden');
+                });
+            });
+        }
+
+        // WhatsApp click handler
+        function openWhatsApp() {
+            const phoneNumber = '';
+            const message = encodeURIComponent('Hello, I would like to know more about the investment memberships.');
+            const url = phoneNumber
+                ? `https://wa.me/${phoneNumber}?text=${message}`
+                : `https://wa.me/?text=${message}`;
+            window.open(url, '_blank');
+        }
+
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+
+            document.getElementById('detailsLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Membership details page would open here. This would typically link to a detailed comparison page.');
+            });
+
+            setupMembershipToggles();
+            fetchUsers();
+        });
+    </script>
+</body>
+</html>
