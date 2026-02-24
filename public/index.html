@@ -319,6 +319,129 @@
         .clear-data-btn:hover {
             background-color: var(--gold-light);
         }
+
+        /* Modal Confirmation */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--dark-bg);
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 350px;
+            width: 100%;
+            text-align: center;
+            border: 2px solid var(--gold);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-content h3 {
+            color: var(--gold);
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .modal-content p {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .modal-content .membership-name {
+            color: var(--gold-light);
+            font-weight: 600;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .modal-btn.confirm {
+            background-color: var(--gold);
+            color: #222;
+        }
+
+        .modal-btn.confirm:hover {
+            background-color: var(--gold-light);
+        }
+
+        .modal-btn.cancel {
+            background-color: var(--blue-gray);
+            color: var(--text-light);
+        }
+
+        .modal-btn.cancel:hover {
+            background-color: #7a8fa3;
+        }
+
+        .loading {
+            display: none;
+            color: var(--gold);
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        /* Select Membership Button */
+        .select-membership-btn {
+            width: 100%;
+            margin-top: 12px;
+            padding: 10px;
+            background-color: var(--gold);
+            color: #222;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .select-membership-btn:hover {
+            background-color: var(--gold-light);
+        }
     </style>
 </head>
 <body>
@@ -355,8 +478,9 @@
                 <div class="membership-header foundation">
                     <h5><strong>FOUNDATION</strong> <span>MEMBERSHIP</span></h5>
                 </div>
-                <div class="membership-body">
+                <div class="membership-body hidden">
                     <p>We invest for you, in shares and in the Mansa-X global fund. Service is free online with your personal representative, but service in the office may have extra charges.</p>
+                    <button class="select-membership-btn" onclick="openMembershipSelection('foundation')">Select Foundation</button>
                 </div>
             </div>
 
@@ -365,8 +489,9 @@
                 <div class="membership-header economy">
                     <h5><strong>ECONOMY</strong> <span>MEMBERSHIP</span></h5>
                 </div>
-                <div class="membership-body">
+                <div class="membership-body hidden">
                     <p>We will invest your money for you at a guaranteed rate with the Mansa-X global fund. Service is free online with your personal representative, but service in the office may have extra charges.</p>
+                    <button class="select-membership-btn" onclick="openMembershipSelection('economy')">Select Economy</button>
                 </div>
             </div>
 
@@ -387,7 +512,23 @@
         </div>
     </div>
 
+    <!-- Membership Confirmation Modal -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <h3>Confirm Membership</h3>
+            <div class="loading" id="loadingSpinner">Updating membership...</div>
+            <p>Are you sure you want to select <span class="membership-name" id="membershipName">FOUNDATION</span> membership?</p>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeConfirmationModal()">Cancel</button>
+                <button class="modal-btn confirm" id="confirmMembershipBtn" onclick="submitMembershipSelection()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // ===== STATE MANAGEMENT =====
+        let selectedMembership = null;
+
         // ===== AUTHENTICATION CHECK =====
         function loadUser() {
             const userData = localStorage.getItem('fourfront_user');
@@ -403,6 +544,76 @@
         const user = loadUser();
         if (!user) {
             window.location.href = '/signup.html';
+        }
+
+        // ===== MEMBERSHIP CONFIRMATION =====
+        function openMembershipSelection(membership) {
+            selectedMembership = membership;
+            const membershipDisplay = membership.charAt(0).toUpperCase() + membership.slice(1);
+            document.getElementById('membershipName').textContent = membershipDisplay.toUpperCase();
+            document.getElementById('confirmationModal').classList.add('show');
+            document.getElementById('confirmMembershipBtn').disabled = false;
+            document.getElementById('loadingSpinner').classList.remove('show');
+        }
+
+        function closeConfirmationModal() {
+            selectedMembership = null;
+            document.getElementById('confirmationModal').classList.remove('show');
+            document.getElementById('loadingSpinner').classList.remove('show');
+        }
+
+        async function submitMembershipSelection() {
+            if (!selectedMembership) return;
+
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const confirmBtn = document.getElementById('confirmMembershipBtn');
+
+            // Show loading state
+            loadingSpinner.classList.add('show');
+            confirmBtn.disabled = true;
+
+            try {
+                const response = await fetch('/api/user/membership', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        membership: selectedMembership,
+                        user_email: user.email,
+                        user_name: user.name
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Success - update local storage
+                    const userData = loadUser();
+                    userData.membership = selectedMembership;
+                    localStorage.setItem('fourfront_user', JSON.stringify(userData));
+
+                    // Show success message
+                    const membershipDisplay = selectedMembership.charAt(0).toUpperCase() + selectedMembership.slice(1);
+                    loadingSpinner.innerHTML = `✓ Successfully updated to ${membershipDisplay} membership!`;
+
+                    // Close modal after 2 seconds
+                    setTimeout(() => {
+                        closeConfirmationModal();
+                        location.reload();
+                    }, 2000);
+                } else {
+                    alert('Error updating membership: ' + (data.message || 'Unknown error'));
+                    loadingSpinner.classList.remove('show');
+                    confirmBtn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Error submitting membership:', error);
+                alert('Error updating membership. Please try again.');
+                loadingSpinner.classList.remove('show');
+                confirmBtn.disabled = false;
+            }
         }
 
         // ===== MAIN PAGE LOGIC =====
@@ -455,7 +666,7 @@
             }, 4000); // Change carousel every 4 seconds
         }
 
-        // Membership toggle functionality
+        // Membership toggle functionality - expand/collapse on header click
         function setupMembershipToggles() {
             document.querySelectorAll('.membership-header').forEach(header => {
                 header.addEventListener('click', function() {
@@ -487,6 +698,13 @@
 
             setupMembershipToggles();
             fetchUsers();
+
+            // Close modal when clicking outside
+            document.getElementById('confirmationModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeConfirmationModal();
+                }
+            });
         });
     </script>
 </body>

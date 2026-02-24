@@ -294,6 +294,7 @@ Route::get('/openapi.json', function () {
 // API Routes
 Route::post('/users', [UserController::class, 'store']);
 Route::post('/users/{userId}/wallets', [WalletController::class, 'store']);
+Route::post('/user/membership', [UserController::class, 'updateMembership']);
 Route::get('/users/{userId}/profile', [ProfileController::class, 'show']);
 Route::get('/wallets/all', [WalletController::class, 'getAllWallets']);
 Route::get('/wallets/{walletId}', [WalletController::class, 'show']);
