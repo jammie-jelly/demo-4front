@@ -24,7 +24,7 @@ class StoreUserRequest extends FormRequest
         return [
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
-            'membership' => 'required|in:Foundation,Economy',
+            'membership' => 'nullable|in:Foundation,Economy',
         ];
     }
 
@@ -39,7 +39,6 @@ class StoreUserRequest extends FormRequest
             'email.required' => 'The email field is required.',
             'email.email' => 'The email must be a valid email address.',
             'email.unique' => 'The email has already been taken.',
-            'membership.required' => 'The membership field is required.',
             'membership.in' => 'The membership must be either Foundation or Economy.',
         ];
     }

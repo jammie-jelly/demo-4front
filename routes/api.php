@@ -211,11 +211,11 @@ Route::get('/openapi.json', function () {
                 ],
                 'UserInput' => [
                     'type' => 'object',
-                    'required' => ['name', 'email', 'membership'],
+                    'required' => ['name', 'email'],
                     'properties' => [
                         'name' => ['type' => 'string', 'example' => 'John Doe'],
                         'email' => ['type' => 'string', 'format' => 'email', 'example' => 'john@example.com'],
-                        'membership' => ['type' => 'string', 'enum' => ['Foundation', 'Economy'], 'example' => 'Foundation'],
+                        'membership' => ['type' => 'string', 'enum' => ['Foundation', 'Economy'], 'example' => 'Foundation', 'nullable' => true],
                     ],
                 ],
                 'UserProfile' => [
