@@ -136,10 +136,29 @@
     </div>
 
     <script>
+        // Check if user is already logged in
+        function checkExistingUser() {
+            const userData = localStorage.getItem('fourfront_user');
+            if (userData) {
+                try {
+                    const user = JSON.parse(userData);
+                    if (user.name && user.email) {
+                        // Valid user data found, redirect to index
+                        window.location.href = '/';
+                    }
+                } catch (e) {
+                    // Invalid JSON, continue to signup
+                }
+            }
+        }
+
         function saveUser(name, email) {
             const userData = { name, email, savedAt: new Date().toISOString() };
             localStorage.setItem('fourfront_user', JSON.stringify(userData));
         }
+
+        // Check on page load
+        checkExistingUser();
 
         document.getElementById('signupForm').addEventListener('submit', function(e) {
             e.preventDefault();
