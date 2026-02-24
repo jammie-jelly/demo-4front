@@ -442,6 +442,41 @@
         .select-membership-btn:hover {
             background-color: var(--gold-light);
         }
+
+        /* Current Membership Display */
+        .current-membership-section {
+            background-color: var(--dark-bg);
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid var(--gold);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .current-membership-section h3 {
+            color: var(--gold);
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .current-membership-section p {
+            color: var(--text-light);
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        /* Hide membership selection */
+        .membership-selection-grid {
+            transition: opacity 0.3s ease, max-height 0.3s ease;
+            opacity: 1;
+        }
+
+        .membership-selection-grid.hidden-grid {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -466,39 +501,48 @@
                 <!-- Populated by carousel animation -->
             </div>
 
-            <!-- Promo Section -->
-            <div class="promo-section">
-                <h5>Now let's make you great!</h5>
-                <p>You have shown us where you are doing well and where we can support you to be great!</p>
-                <p class="highlight">From your profile we recommend these memberships. Pick one that fits you best and start your financial adventure</p>
+            <!-- Current Membership Display (hidden by default) -->
+            <div class="current-membership-section" id="currentMembershipSection" style="display: none;">
+                <h3>Your Membership</h3>
+                <p id="membershipDisplay"></p>
             </div>
 
-            <!-- Foundation Membership -->
-            <div class="membership-card" data-membership="foundation">
-                <div class="membership-header foundation">
-                    <h5><strong>FOUNDATION</strong> <span>MEMBERSHIP</span></h5>
+            <!-- Membership Selection Grid -->
+            <div class="membership-selection-grid" id="membershipSelectionGrid">
+                <!-- Promo Section -->
+                <div class="promo-section">
+                    <h5>Now let's make you great!</h5>
+                    <p>You have shown us where you are doing well and where we can support you to be great!</p>
+                    <p class="highlight">From your profile we recommend these memberships. Pick one that fits you best and start your financial adventure</p>
                 </div>
-                <div class="membership-body hidden">
-                    <p>We invest for you, in shares and in the Mansa-X global fund. Service is free online with your personal representative, but service in the office may have extra charges.</p>
-                    <button class="select-membership-btn" onclick="openMembershipSelection('foundation')">Select Foundation</button>
-                </div>
-            </div>
 
-            <!-- Economy Membership -->
-            <div class="membership-card" data-membership="economy">
-                <div class="membership-header economy">
-                    <h5><strong>ECONOMY</strong> <span>MEMBERSHIP</span></h5>
+                <!-- Foundation Membership -->
+                <div class="membership-card" data-membership="foundation">
+                    <div class="membership-header foundation">
+                        <h5><strong>FOUNDATION</strong> <span>MEMBERSHIP</span></h5>
+                    </div>
+                    <div class="membership-body hidden">
+                        <p>We invest for you, in shares and in the Mansa-X global fund. Service is free online with your personal representative, but service in the office may have extra charges.</p>
+                        <button class="select-membership-btn" onclick="openMembershipSelection('foundation')">Select Foundation</button>
+                    </div>
                 </div>
-                <div class="membership-body hidden">
-                    <p>We will invest your money for you at a guaranteed rate with the Mansa-X global fund. Service is free online with your personal representative, but service in the office may have extra charges.</p>
-                    <button class="select-membership-btn" onclick="openMembershipSelection('economy')">Select Economy</button>
-                </div>
-            </div>
 
-            <!-- Details Link -->
-            <a href="#" class="details-link" id="detailsLink">
-                A closer look at the memberships details is available here
-            </a>
+                <!-- Economy Membership -->
+                <div class="membership-card" data-membership="economy">
+                    <div class="membership-header economy">
+                        <h5><strong>ECONOMY</strong> <span>MEMBERSHIP</span></h5>
+                    </div>
+                    <div class="membership-body hidden">
+                        <p>We will invest your money for you at a guaranteed rate with the Mansa-X global fund. Service is free online with your personal representative, but service in the office may have extra charges.</p>
+                        <button class="select-membership-btn" onclick="openMembershipSelection('economy')">Select Economy</button>
+                    </div>
+                </div>
+
+                <!-- Details Link -->
+                <a href="#" class="details-link" id="detailsLink">
+                    A closer look at the memberships details is available here
+                </a>
+            </div>
         </div>
 
         <!-- Footer -->
@@ -690,6 +734,20 @@
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('userName').textContent = user.name;
             document.getElementById('current-year').textContent = new Date().getFullYear();
+
+            // Check if user has membership already
+            if (user.membership) {
+                // Hide membership selection grid
+                document.getElementById('membershipSelectionGrid').classList.add('hidden-grid');
+                // Show current membership section
+                document.getElementById('currentMembershipSection').style.display = 'block';
+                document.getElementById('membershipDisplay').textContent = user.membership + ' Membership';
+            } else {
+                // Show membership selection grid
+                document.getElementById('membershipSelectionGrid').classList.remove('hidden-grid');
+                // Hide current membership section
+                document.getElementById('currentMembershipSection').style.display = 'none';
+            }
 
             document.getElementById('detailsLink').addEventListener('click', function(e) {
                 e.preventDefault();
