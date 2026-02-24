@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Wallet;
 use App\Models\Transaction;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreTransactionRequest;
 use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
@@ -12,13 +12,9 @@ class TransactionController extends Controller
     /**
      * Add a transaction to a wallet
      */
-    public function store(Request $request, Wallet $walletId)
+    public function store(StoreTransactionRequest $request, Wallet $walletId)
     {
-        $validated = $request->validate([
-            'type' => 'required|in:income,expense',
-            'amount' => 'required|numeric|min:0.01',
-            'description' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         // Use database transaction for safety
         DB::beginTransaction();

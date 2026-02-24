@@ -4,18 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Wallet;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreWalletRequest;
 
 class WalletController extends Controller
 {
     /**
      * Create a new wallet for a user
      */
-    public function store(Request $request, User $userId)
+    public function store(StoreWalletRequest $request, User $userId)
     {
-        $validated = $request->validate([
-            'name' => 'required|string',
-        ]);
+        $validated = $request->validated();
 
         $wallet = Wallet::create([
             'user_id' => $userId->id,
